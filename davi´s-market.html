@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davi's Market - PDV Profissional</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            height: 100vh; 
+            overflow: hidden; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        /* LOGIN */
+        .login-screen { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .login-card { 
+            background: white; 
+            padding: 50px; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
+            width: 400px; 
+            text-align: center;
+        }
+        .logo { 
+            font-size: 36px; 
+            color: #007bff; 
+            margin-bottom: 30px; 
+            font-weight: bold;
+        }
+        .form-group { 
+            margin: 25px 0; 
+            position: relative;
+        }
+        input { 
+            width: 100%; 
+            padding: 18px; 
+            border: 2px solid #e1e5e9; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            transition: all 0.3s ease;
+        }
+        input:focus { 
+            outline: none; 
+            border-color: #007bff; 
+            box-shadow: 0 0 0 4px rgba(0,123,255,0.1);
+        }
+        .btn { 
+            width: 100%; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+        .btn-primary { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+        .btn-success { background: linear-gradient(45deg, #28a745, #20c997); color: white; }
+        .btn-danger { background: linear-gradient(45deg, #dc3545, #c82333); color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none;
+        }
+        .link { color: #007bff; text-decoration: none; font-weight: bold; }
+
+        /* PDV */
+        .pdv-screen { display: none; height: 100vh; }
+        .header { 
+            background: linear-gradient(90deg, #007bff, #0056b3); 
+            color: white; 
+            padding: 25px; 
+            text-align: center; 
+            font-size: 32px; 
+            font-weight: bold;
+            position: relative;
+        }
+        .header-controls { 
+            position: absolute; 
+            right: 30px; 
+            top: 50%; 
+            transform: translateY(-50%);
+        }
+        .btn-small { 
+            padding: 12px 24px; 
+            font-size: 14px; 
+            margin-left: 10px; 
+            border-radius: 25px; 
+            width: auto;
+        }
+        
+        .main-content { 
+            display: flex; 
+            height: calc(100vh - 110px); 
+        }
+        .input-area { 
+            flex: 1.2; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 50px; 
+            background: #f8f9fa;
+        }
+        .barcode-input { 
+            font-size: 32px; 
+            padding: 25px; 
+            width: 450px; 
+            border: 4px solid #dee2e6; 
+            border-radius: 15px; 
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .barcode-input:focus { 
+            border-color: #28a745; 
+            box-shadow: 0 0 0 6px rgba(40,167,69,0.2);
+        }
+        .quantity-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .quantity-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .quant-1 { background: #007bff; color: white; }
+        .quant-mais { background: #28a745; color: white; }
+        
+        .product-info { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            text-align: center; 
+            min-width: 350px;
+        }
+        .product-info div { 
+            font-size: 24px; 
+            margin: 15px 0; 
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .cart-area { 
+            flex: 1; 
+            padding: 40px; 
+            overflow-y: auto; 
+            background: white;
+        }
+        .cart-title { 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            color: #007bff;
+        }
+        .cart-item { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item-qtd { font-size: 18px; color: #28a745; font-weight: bold; }
+        
+        .footer-total { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            background: linear-gradient(90deg, #28a745, #20c997); 
+            color: white; 
+            padding: 30px; 
+            font-size: 36px; 
+            font-weight: bold; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 -8px 25px rgba(0,0,0,0.15);
+        }
+        
+        /* Modal Cadastro Produto */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 1000; 
+            display: none;
+        }
+        .modal { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: white; 
+            padding: 40px; 
+            border-radius: 20px; 
+            width: 90%; 
+            max-width: 450px; 
+            z-index: 1001;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- TELA LOGIN -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="logo">🛒 Davi's Market PDV</div>
+            <div id="errorMsg" class="error"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="username" placeholder="👤 Usuário" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="🔒 Senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary">🚀 Entrar no PDV</button>
+            </form>
+            <p style="margin-top: 20px;">
+                <a href="#" class="link" onclick="showRegister()">📝 Novo Cadastro</a>
+            </p>
+            <small><strong>Teste:</strong> admin / 1234</small>
+        </div>
+    </div>
+
+    <!-- TELA PDV -->
+    <div id="pdvScreen" class="pdv-screen">
+        <div class="header">
+            Davi's Market - PDV Profissional
+            <div class="header-controls">
+                <button class="btn btn-small btn-primary" onclick="showProductRegister()">➕ Cadastrar Produto</button>
+                <button class="btn btn-small btn-danger" onclick="logout()">🚪 Sair</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-area">
+                <input type="text" class="barcode-input" id="barcodeInput" placeholder="📱 Escaneie ou digite o código de barras" />
+                <div class="quantity-section">
+                    <button class="quantity-btn quant-1" onclick="setQuantity(1)">1x</button>
+                    <button class="quantity-btn quant-mais" onclick="setQuantity('mais')">+1</button>
+                </div>
+                <button class="btn btn-success" onclick="addProduct()" style="width: 250px; padding: 25px; font-size: 22px;">➕ ADICIONAR AO CARRINHO</button>
+                
+                <div class="product-info">
+                    <div id="productName">Nome: ---</div>
+                    <div id="productPrice">Preço: R$ 0,00</div>
+                    <div id="productQtd" style="font-size: 18px; color: #6c757d;">Quantidade: 1</div>
+                </div>
+            </div>
+            
+            <div class="cart-area">
+                <div class="cart-title">🛒 Carrinho Atual</div>
+                <div id="cartItems"></div>
+            </div>
+        </div>
+        
+        <div class="footer-total">
+            <span>TOTAL: <span id="totalAmount">R$ 0,00</span></span>
+            <div>
+                <button class="btn btn-danger" onclick="clearCart()" style="margin-right: 15px;">🗑️ Limpar</button>
+                <button class="btn btn-success" onclick="finishSale()">💰 Finalizar Venda</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CADASTRO PRODUTO -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeProductRegister()"></div>
+    <div class="modal" id="productModal">
+        <h2 style="color: #007bff; margin-bottom: 25px;">➕ Cadastrar Produto</h2>
+        <div class="form-group">
+            <input type="text" id="prodName" placeholder="Nome do Produto" />
+        </div>
+        <div class="form-group">
+            <input type="text" id="prodBarcode" placeholder="Código de Barras" />
+        </div>
+        <div class="form-group">
+            <input type="number" id="prodPrice" step="0.01" placeholder="Preço (R$)" />
+        </div>
+        <div style="display: flex; gap: 15px;">
+            <button class="btn btn-success" onclick="saveProduct()" style="flex: 1;">💾 Salvar</button>
+            <button class="btn btn-primary" onclick="closeProductRegister()" style="flex: 1;">❌ Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // SIMULAÇÃO JAVA - "Banco de Dados" LocalStorage
+        let users = JSON.parse(localStorage.getItem('davisMarketUsers')) || { admin: '1234' };
+        let products = JSON.parse(localStorage.getItem('davisMarketProducts')) || {
+            '123456': { nome: 'Arroz 5kg Tio João', preco: 15.99 },
+            '789012': { nome: 'Feijão 1kg Camil', preco: 8.50 },
+            '345678': { nome: 'Óleo 900ml Liza', preco: 7.99 },
+            '901234': { nome: 'Macarrão 500g Renata', preco: 4.50 },
+            '567890': { nome: 'Açúcar 1kg União', preco: 5.99 }
+        };
+        let currentUser = null;
+        let cart = [];
+        let currentQuantity = 1;
+
+        // LOGIN
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (users[username] && users[username] === password) {
+                currentUser = username;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('pdvScreen').style.display = 'block';
+                document.getElementById('barcodeInput').focus();
+            } else {
+                showError('Usuário ou senha inválidos!');
+            }
+        });
+
+        function showRegister() {
+            const username = prompt('Novo usuário:');
+            const password = prompt('Nova senha:');
+            if (username && password && !users[username]) {
+                users[username] = password;
+                localStorage.setItem('davisMarketUsers', JSON.stringify(users));
+                alert('✅ Usuário cadastrado com sucesso!');
+            } else {
+                alert('❌ Erro: usuário já existe ou campos vazios!');
+            }
+        }
+
+        // PDV FUNCTIONS
+        document.getElementById('barcodeInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addProduct();
+        });
+
+        function setQuantity(qtd) {
+            if (qtd === 'mais') currentQuantity++;
+            else currentQuantity = 1;
+            document.getElementById('productQtd').textContent = `Quantidade: ${currentQuantity}`;
+        }
+
+        function addProduct() {
+            const barcode = document.getElementById('barcodeInput').value.trim();
+            const product = products[barcode];
+            
+            if (product) {
+                for (let i = 0; i < currentQuantity; i++) {
+                    cart.push({ ...product, qtd: 1 });
+                }
+                document.getElementById('productName').textContent = `Nome: ${product.nome}`;
+                document.getElementById('productPrice').textContent = `Preço: R$ ${product.preco.toFixed(2)}`;
+                updateCart();
+                currentQuantity = 1;
+                document.getElementById('productQtd').textContent = 'Quantidade: 1';
+            } else {
+                alert('❌ Produto não encontrado!');
+            }
+            document.getElementById('barcodeInput').value = '';
+            document.getElementById('barcodeInput').focus();
+        }
+
+        function updateCart() {
+            const cartEl = document.getElementById('cartItems');
+            let total = 0;
+            
+            cartEl.innerHTML = '';
+            const grouped = {};
+            
+            cart.forEach(item => {
+                if (!grouped[item.nome]) grouped[item.nome] = { product: item, totalQtd: 0, totalPrice: 0 };
+                grouped[item.nome].totalQtd++;
+                grouped[item.nome].totalPrice += item.preco;
+                total += item.preco;
+            });
+            
+            Object.values(grouped).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <span>${item.product.nome}</span>
+                    <span class="cart-item-qtd">${item.totalQtd}x - R$ ${item.totalPrice.toFixed(2)}</span>
+                `;
+                cartEl.appendChild(div);
+            });
+            
+            document.getElementById('totalAmount').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function clearCart() {
+            cart = [];
+            document.getElementById('productName').textContent = 'Nome: ---';
+            document.getElementById('productPrice').textContent = 'Preço: R$ 0,00';
+            updateCart();
+        }
+
+        function finishSale() {
+            if (cart.length === 0) {
+                alert('❌ Carrinho vazio!');
+                return;
+            }
+            const total = cart.reduce((sum, item) => sum + item.preco, 0);
+            alert(`✅ VENDA FINALIZADA por ${currentUser}!\n💰 TOTAL: R$ ${total.toFixed(2)}\n📦 Itens: ${cart.length}`);
+            clearCart();
+        }
+
+        function logout() {
+            currentUser = null;
+            cart = [];
+            document.getElementById('pdvScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+
+        // CADASTRO PRODUTOS
+        function showProductRegister() {
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('productModal').style.display = 'block';
+            document.getElementById('prodBarcode').focus();
+        }
+
+        function closeProductRegister() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('productModal').style.display = 'none';
+            document.querySelectorAll('#productModal input').forEach(input => input.value = '');
+        }
+
+        function saveProduct() {
+            const nome = document.getElementById('prodName').value.trim();
+            const barcode = document.getElementById('prodBarcode').value.trim();
+            const preco = parseFloat(document.getElementById('prodPrice').value);
+            
+            if (nome && barcode && !isNaN(preco) && preco > 0) {
+                products[barcode] = { nome, preco };
+                localStorage.setItem('davisMarketProducts', JSON.stringify(products));
+                alert('✅ Produto cadastrado com sucesso!');
+                closeProductRegister();
+            } else {
+                alert('❌ Preencha todos os campos corretamente!');
+            }
+        }
+
+        function showError(msg) {
+            const errorEl = document.getElementById('errorMsg');
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+            setTimeout(() => errorEl.style.display = 'none', 5000);
+        }
+    </script>
+</body>
+</html>
